@@ -1,8 +1,11 @@
 import yfinance as yf
 import requests
 from bs4 import BeautifulSoup
+from dotenv import load_dotenv
+import os
+from datetime import datetime
 
-
+load_dotenv()
 def get_preMarket_data():
     PRE_MARKET_URL = "https://www.tradingview.com/markets/stocks-usa/market-movers-pre-market-gainers/"
     gainers = []
@@ -17,9 +20,8 @@ def get_preMarket_data():
         ticker = cells[0].find("a").text.strip()    #inside the first td it finds the a element which contains the ticker
         percent_change = cells[1].text.strip()      #inside the seccond td it finds the percent change
         pre_market_volume = cells[4].text.strip()   #inside the fourth td it finds the pre-market volume
-        percent_change = float(percent_change.replace("+","").replace("%","")) # convert the sstring number into a float
+        percent_change = float(percent_change.replace("%","")) # convert the sstring number into a float
         gainers.append((ticker, percent_change, pre_market_volume)) #add the gainers to the list
-
     return gainers
 
 def large_cap_stock_data():
@@ -57,6 +59,24 @@ def get_preMarket_losers():
         losers.append((ticker, percent_change, pre_market_volume))
     return losers
 
+def get_economic_holiday():
+    API_KEY = os.getenv("FIN_API_KEY")
+    URL = f"https://finnhub.io/api/v1/stock/market-status?exchange=US&token={API_KEY}"
+    response = requests.get(URL)
+    if response.status_code != 200:
+        return f"Error: {response.status_code} - {response.text}"
+    try:
+        data = response.json()
+    except Exception:
+        return "Error: Could not parse JSON (check API key or endpoint)."
+    status = data.get('isOpen', "unknown")
+    if status == True:
+        return "Market is Closed today"
+    else:
+        return f"Market is Open right now"
+    return "Market is Open today"
+
+
 
 
 
@@ -67,11 +87,16 @@ def format_tweet(gainers):
     return "\n".join(lines)
 
 if __name__ == "__main__":
-    gainers = get_preMarket_data()
-    losers = get_preMarket_losers()
-    print("Top pre-market Gainers:")
-    text_tweet = format_tweet(gainers)
-    print(text_tweet + "\n")
-    print("Top pre-market Losers:")
-    text_tweet = format_tweet(losers)
-    print(text_tweet)
+    # gainers = get_preMarket_data()
+    # losers = get_preMarket_losers()
+    # large_cap_stocks = large_cap_stock_data()
+    # print("Top pre-market Gainers:")
+    # text_tweet = format_tweet(gainers)
+    # print(text_tweet + "\n")
+    # print("Top pre-market Losers:")
+    # text_tweet = format_tweet(losers)
+    # print(text_tweet + "\n")
+    # print("Large Cap Stock Activity:")
+    # text_tweet = format_tweet(large_cap_stocks)
+    # print(text_tweet)
+    print(get_economic_holiday())
