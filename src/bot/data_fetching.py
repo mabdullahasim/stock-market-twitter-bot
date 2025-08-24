@@ -3,8 +3,12 @@ import requests
 from bs4 import BeautifulSoup
 from dotenv import load_dotenv
 import os
-from datetime import datetime
-from bot.format_tweet import format_gainers_tweet
+from utils.format_tweet import format_gainers_tweet
+from utils.format_tweet import format_earnings
+import pandas as pd
+import time
+from datetime import datetime, timedelta
+
 
 load_dotenv()
 def get_preMarket_data():
@@ -73,19 +77,49 @@ def get_economic_holiday():
     
     return data.get("holiday")
 
+def get_earnings_calendar():
+    url = "https://scanner.tradingview.com/america/scan?label-product=screener-stock-old" #url to get request from
+    today = datetime.today() #current date and time
+    start_of_week = today - timedelta(days=today.weekday()) #get the monday of the current week
+    end_of_week = start_of_week + timedelta(days=6)#get the sunday of the current week
+    start_ts = int(start_of_week.timestamp()) #timestamp converts date to a unix time stamp which url expects
+    end_ts   = int(end_of_week.timestamp())
+
+    payload = { #payload to be sent with the request
+        "filter": [ #filter defines which stocks to return
+            {"left": "is_primary", "operation": "equal", "right": True},
+            {"left": "earnings_release_date,earnings_release_next_date", "operation": "in_range", "right": [start_ts, end_ts]}, #only want earnings releases between start_ts and end_ts
+            {"left": "earnings_release_date,earnings_release_next_date", "operation": "nequal", "right": end_ts} 
+        ],
+        "options": {"lang": "en"},
+        "markets": ["america"],
+        "symbols": {"query": {"types": []}, "tickers": []},
+        "columns": [ #columns tells the url which feilds yo want
+            "logoid", "name", "market_cap_basic",
+            "earnings_per_share_forecast_next_fq", "earnings_per_share_fq",
+            "eps_surprise_fq", "eps_surprise_percent_fq",
+            "revenue_forecast_next_fq", "revenue_fq",
+            "earnings_release_next_date", "earnings_release_next_calendar_date",
+            "earnings_release_next_time", "description", "type", "subtype",
+            "update_mode", "earnings_per_share_forecast_fq", "revenue_forecast_fq",
+            "earnings_release_date", "earnings_release_calendar_date", "earnings_release_time",
+            "currency", "fundamental_currency_code"
+        ],
+        "sort": {"sortBy": "market_cap_basic", "sortOrder": "desc"}, #sort sorts by basic market cap
+        "preset": None,
+        "range": [0, 5] #returns rows from 0 to 5
+    }
+
+    headers = { #headers tells the url that you are sending json in the post request
+        "content-type": "application/json"
+    }
+
+    response = requests.post(url, json=payload, headers=headers) #sends pay load to the url
+    data = response.json() #parse the response
+    df = format_earnings(data) #send the data to a formmater
+    print(df.to_string(index=False))
 
 
 if __name__ == "__main__":
-    gainers = get_preMarket_data()
-    losers = get_preMarket_losers()
-    large_cap_stocks = large_cap_stock_data()
-    text_tweet = format_gainers_tweet(gainers, "None")
-    print(text_tweet + "\n")
-
-    print("Top pre-market Losers:")
-    text_tweet = format_tweet(losers)
-    print(text_tweet + "\n")
-    print("Large Cap Stock Activity:")
-    text_tweet = format_tweet(large_cap_stocks)
-    print(text_tweet)
+    calendar = get_earnings_calendar()
     

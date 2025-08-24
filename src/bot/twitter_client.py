@@ -1,8 +1,6 @@
 import tweepy
 from dotenv import load_dotenv
 import os
-from bot.data_fetching import get_preMarket_data
-from bot.format_tweet import format_gainers_tweet
 
 load_dotenv()
 
