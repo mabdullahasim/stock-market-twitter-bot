@@ -4,6 +4,7 @@ from bs4 import BeautifulSoup
 from dotenv import load_dotenv
 import os
 from datetime import datetime
+from bot.format_tweet import format_gainers_tweet
 
 load_dotenv()
 def get_preMarket_data():
@@ -69,34 +70,22 @@ def get_economic_holiday():
         data = response.json()
     except Exception:
         return "Error: Could not parse JSON (check API key or endpoint)."
-    status = data.get('isOpen', "unknown")
-    if status == True:
-        return "Market is Closed today"
-    else:
-        return f"Market is Open right now"
-    return "Market is Open today"
+    
+    return data.get("holiday")
 
 
-
-
-
-def format_tweet(gainers):
-    lines = []
-    for ticker, change, volume in gainers:
-        lines.append(f"{ticker}: {change:.2f}% (Volume: {volume})")
-    return "\n".join(lines)
 
 if __name__ == "__main__":
-    # gainers = get_preMarket_data()
-    # losers = get_preMarket_losers()
-    # large_cap_stocks = large_cap_stock_data()
-    # print("Top pre-market Gainers:")
-    # text_tweet = format_tweet(gainers)
-    # print(text_tweet + "\n")
-    # print("Top pre-market Losers:")
-    # text_tweet = format_tweet(losers)
-    # print(text_tweet + "\n")
-    # print("Large Cap Stock Activity:")
-    # text_tweet = format_tweet(large_cap_stocks)
-    # print(text_tweet)
-    print(get_economic_holiday())
+    gainers = get_preMarket_data()
+    losers = get_preMarket_losers()
+    large_cap_stocks = large_cap_stock_data()
+    text_tweet = format_gainers_tweet(gainers, "None")
+    print(text_tweet + "\n")
+
+    print("Top pre-market Losers:")
+    text_tweet = format_tweet(losers)
+    print(text_tweet + "\n")
+    print("Large Cap Stock Activity:")
+    text_tweet = format_tweet(large_cap_stocks)
+    print(text_tweet)
+    

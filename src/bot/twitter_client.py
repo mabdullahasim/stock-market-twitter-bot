@@ -18,12 +18,5 @@ client = tweepy.Client(
     access_token_secret=ACCESS_SECRET
 )
 
-if __name__ == "__main__":
-    gainers = get_preMarket_data()
-    tweet_text = format_gainers_tweet(gainers)
-    print(tweet_text)
-    try:
-        response = client.create_tweet(text=tweet_text)
-        print("Tweet posted successfully! Tweet ID:", response.data['id'])
-    except tweepy.TweepyException as e:
-        print("Failed to post tweet:", e)
+def get_client():
+   return client
