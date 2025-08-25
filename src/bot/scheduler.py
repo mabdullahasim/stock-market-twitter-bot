@@ -43,16 +43,6 @@ def pre_market_losers_tweet():
     except tweepy.TweepyException as e:
         print("Failed to post tweet:", e)
 
-def after_hours_tweet():
-    client = getClient()
-    gainers = get_preMarket_data()
-    tweet_text = format_gainers_tweet(gainers)
-    try:
-        response = client.create_tweet(text=tweet_text)
-        print("Tweet posted successfully! Tweet ID:", response.data['id'])
-    except tweepy.TweepyException as e:
-        print("Failed to post tweet:", e)
-
 def earnings_tweet():
     client = getClient()
     earnings = get_earnings_calendar()

@@ -26,7 +26,7 @@ def format_large_cap(large_cap):
 def format_earnings_tweet(data):
     df = format_earnings(data)
     lines = []
-    for _, row in df.iterrows(): #iterate throug rows in the data frame
+    for _, row in df.iterrows(): #iterate through rows in the data frame
         ticker = row['Ticker']
         eps_est = row['EPS est']
         rev_est = row['Revenue est']
