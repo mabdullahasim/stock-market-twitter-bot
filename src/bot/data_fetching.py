@@ -90,7 +90,7 @@ def get_earnings_calendar():
             {"left": "earnings_release_date,earnings_release_next_date", "operation": "nequal", "right": end_ts}
         ],
         "options": {"lang": "en"},
-        "markets": ["america"],
+        "markets": ["america"], #specify american markets
         "symbols": {"query": {"types": []}, "tickers": []},
         "columns": [ #columns tells the url which feilds you want
             "name",

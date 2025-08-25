@@ -28,8 +28,20 @@ def pre_market_gainers_tweet():
     except tweepy.TweepyException as e:
         print("Failed to post tweet:", e)
     
-
-
+def pre_market_losers_tweet():
+    client = get_client()
+    holiday = get_economic_holiday()
+    if holiday is not None:
+        tweet_text = f"Today is {holiday} so market is closed"
+    else:
+        losers = get_preMarket_losers()
+        tweet_text = "Pre-Market Losers:\n" + "\n"
+        tweet_text += format_preMarket_tweet(losers)
+    try:
+        response = client.create_tweet(text=tweet_text)
+        print("Tweet posted successfully! Tweet ID:", response.data['id'])
+    except tweepy.TweepyException as e:
+        print("Failed to post tweet:", e)
 
 def after_hours_tweet():
     client = getClient()
@@ -44,7 +56,7 @@ def after_hours_tweet():
 def earnings_tweet():
     client = getClient()
     earnings = get_earnings_calendar()
-    tweet_text = format_gainers_tweet(gainers)
+    tweet_text = format_earnings_tweet(earnings)
     try:
         response = client.create_tweet(text=tweet_text)
         print("Tweet posted successfully! Tweet ID:", response.data['id'])
@@ -52,7 +64,7 @@ def earnings_tweet():
         print("Failed to post tweet:", e)
 
 if __name__ == "__main__":
-    pre_tweet = pre_market_gainers_tweet()
+    
 
 
 
