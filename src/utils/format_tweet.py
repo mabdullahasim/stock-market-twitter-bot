@@ -1,16 +1,11 @@
 import pandas as pd
 from utils.format_data import format_earnings
 from datetime import datetime
-def format_gainers_tweet(gainers, holiday):
+def format_preMarket_tweet(data):
     lines = []
-    for ticker, change, volume in gainers:
+    for ticker, change, volume in data:
         lines.append(f"${ticker}: {change:.2f}% (Volume: {volume})")
-    
-    if not holiday == 'None':
-        lines.append("\n" + f"Today is {holiday} so market is closed")
-
-    tweet_text = "Top Pre-Market Gainers:\n" + "\n".join(lines)
-    
+    tweet_text = "\n".join(lines)
     # Ensure tweet is within 280 characters
     if len(tweet_text) > 280:
         tweet_text = tweet_text[:277] + "..."

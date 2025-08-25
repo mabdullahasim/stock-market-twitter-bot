@@ -4,7 +4,6 @@ def format_earnings(data):
         "Ticker",
         "eps_fq", "rev_fq",
         "earnings_date"
-        
     ]
 
     rows = [item['d'] for item in data['data']]

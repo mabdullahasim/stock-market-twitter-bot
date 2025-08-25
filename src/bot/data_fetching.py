@@ -3,15 +3,13 @@ import requests
 from bs4 import BeautifulSoup
 from dotenv import load_dotenv
 import os
-from utils.format_tweet import format_gainers_tweet
-from utils.format_tweet import format_earnings_tweet
 import pandas as pd
 import time
 from datetime import datetime, timedelta
 
 
 load_dotenv()
-def get_preMarket_data():
+def get_preMarket_gainers():
     PRE_MARKET_URL = "https://www.tradingview.com/markets/stocks-usa/market-movers-pre-market-gainers/"
     gainers = []
     response = requests.get(PRE_MARKET_URL)         #sends http request to the pre_market_url gets full html content of page
@@ -110,10 +108,5 @@ def get_earnings_calendar():
 
     response = requests.post(url, json=payload, headers=headers) #sends pay load to the url
     data = response.json() #parse the response
-    tweet = format_earnings_tweet(data) #send the data to a formmater
-    print(tweet)
-
-
-if __name__ == "__main__":
-    calendar = get_earnings_calendar()
+    return data
     
