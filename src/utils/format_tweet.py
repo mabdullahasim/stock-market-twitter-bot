@@ -1,4 +1,6 @@
 import pandas as pd
+from utils.format_data import format_earnings
+from datetime import datetime
 def format_gainers_tweet(gainers, holiday):
     lines = []
     for ticker, change, volume in gainers:
@@ -26,28 +28,20 @@ def format_large_cap(large_cap):
 
     return tweet_text
 
-def format_earnings(data):
-    columns = [
-        "logoid", "Ticker", "market_cap_basic",
-        "earnings_per_share_forecast_next_fq", "earnings_per_share_fq",
-        "eps_surprise_fq", "eps_surprise_percent_fq",
-        "revenue_forecast_next_fq", "revenue_fq",
-        "earnings_release_next_date", "earnings_release_next_calendar_date",
-        "earnings_release_next_time", "description", "type", "subtype",
-        "update_mode", "earnings_per_share_forecast_fq", "revenue_forecast_fq",
-        "earnings_release_date", "earnings_release_calendar_date", "earnings_release_time",
-        "currency", "fundamental_currency_code"
-    ]
+def format_earnings_tweet(data):
+    df = format_earnings(data)
+    lines = []
+    for _, row in df.iterrows(): #iterate throug rows in the data frame
+        ticker = row['Ticker']
+        eps_est = row['EPS est']
+        rev_est = row['Revenue est']
+        date = row['earnings_date']
+        timestamp = row['earnings_date']
+        date = datetime.fromtimestamp(timestamp).strftime("%Y-%m-%d") if pd.notna(timestamp) else "N/A"
+        lines.append(f"${ticker:<5} | Eps {eps_est:<6} | Rev {rev_est:<8} | Date {date}")
 
-    rows = [item['d'] for item in data['data']]
-    df = pd.DataFrame(rows, columns=columns)
+    tweet_text = "Largest Cap Earning Estimates This Week:\n" + "\n".join(lines)
+    if len(tweet_text) > 280:
+        tweet_text = tweet_text[:277]
 
-
-    # Format nicely
-    df['EPS est'] = df['earnings_per_share_forecast_next_fq'].apply(lambda x: f"${x:.2f}" if x else "N/A")
-    df['Revenue est'] = df['revenue_forecast_next_fq'].apply(lambda x: f"${x/1e9:.2f}B" if x else "N/A")
-    df['Market Cap'] = df['market_cap_basic'].apply(lambda x: f"${x/1e9:.2f}B" if x else "N/A")
-
-    df = df[['Ticker', 'Market Cap', 'EPS est', 'Revenue est']]
-    return df
-
+    return tweet_text

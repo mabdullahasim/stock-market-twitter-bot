@@ -30,7 +30,8 @@ def after_hours_tweet():
     except tweepy.TweepyException as e:
         print("Failed to post tweet:", e)
 
-
+def earnings_tweet():
+    
 
 
 
