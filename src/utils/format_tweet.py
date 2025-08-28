@@ -40,3 +40,6 @@ def format_earnings_tweet(data):
         tweet_text = tweet_text[:277]
 
     return tweet_text
+
+def format_news():
+    

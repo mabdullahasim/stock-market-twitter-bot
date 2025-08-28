@@ -50,9 +50,9 @@ def large_cap_stock_data():
     large_cap_data = sorted(gainers, key=lambda x: x[1], reverse=True)                 #store the data in large_cap_data sorted by percentage change
     return large_cap_data                                                              #return the large_cap_stock data
 
-def get_preMarket_losers():
-    
-     if now.hour() == 16 and now.minute() == 15:
+def get_market_losers():
+    time = datetime.now()
+    if now.hour() == 16 and now.minute() == 15:
         URL = "https://www.tradingview.com/markets/stocks-usa/market-movers-after-hours-losers/"
     else:
         URL = "https://www.tradingview.com/markets/stocks-usa/market-movers-pre-market-losers/"
@@ -85,6 +85,8 @@ def get_economic_holiday():
         return "Error: Could not parse JSON (check API key or endpoint)."
     
     return data.get("holiday")
+
+
 
 def get_earnings_calendar():
     url = "https://scanner.tradingview.com/america/scan?label-product=screener-stock-old" #url to get request from
@@ -120,4 +122,24 @@ def get_earnings_calendar():
     response = requests.post(url, json=payload, headers=headers) #sends pay load to the url
     data = response.json() #parse the response
     return data
+
+def get_market_news():
+    API_KEY = os.getenv("ALPHA_API_KEY")
+    URL = f"https://www.alphavantage.co/query?function=NEWS_SENTIMENT&topics=finance,financial_markets,economy_monetary,economy_macro&apikey={API_KEY}"
+    response = requests.get(URL)
+    if response.status_code != 200:
+        return f"Error: {response.status_code} - {response.text}"
+
+    try:
+        data = response.json()
+        feed = data.get("feed", [])
+        
+        if feed:
+            return feed[0]
+    except Exception:
+        return "Error: Could not parse JSON (check API key or endpoint)."
     
+    return
+
+if __name__ == "__main__":
+    news = get_market_news()
