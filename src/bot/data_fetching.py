@@ -125,7 +125,7 @@ def get_earnings_calendar():
 
 def get_market_news():
     API_KEY = os.getenv("ALPHA_API_KEY")
-    URL = f"https://www.alphavantage.co/query?function=NEWS_SENTIMENT&topics=finance,financial_markets,economy_monetary,economy_macro&apikey={API_KEY}"
+    URL = f"https://www.alphavantage.co/query?function=NEWS_SENTIMENT&topics=financial_markets&limit=5&apikey={API_KEY}"
     response = requests.get(URL)
     if response.status_code != 200:
         return f"Error: {response.status_code} - {response.text}"
@@ -133,9 +133,13 @@ def get_market_news():
     try:
         data = response.json()
         feed = data.get("feed", [])
-        
-        if feed:
-            return feed[0]
+        top_article = feed[0]
+        return {
+            "title": top_article.get("title"),
+            "url": top_article.get("url"),
+            "time_published": top_article.get("time_published"),
+            "source": top_article.get("source")
+        }
     except Exception:
         return "Error: Could not parse JSON (check API key or endpoint)."
     
