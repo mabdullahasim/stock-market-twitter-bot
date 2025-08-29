@@ -136,9 +136,9 @@ def get_market_news():
         top_article = feed[0]
         return {
             "title": top_article.get("title"),
+            "summary": top_article.get("summary"),
+            "source": top_article.get("source"),
             "url": top_article.get("url"),
-            "time_published": top_article.get("time_published"),
-            "source": top_article.get("source")
         }
     except Exception:
         return "Error: Could not parse JSON (check API key or endpoint)."

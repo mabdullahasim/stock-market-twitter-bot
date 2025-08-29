@@ -1,12 +1,18 @@
 import tweepy
-from utils.format_tweet import format_preMarket_tweet
 from bot.twitter_client import get_client
 from datetime import datetime
 from bot.data_fetching import (
     get_earnings_calendar,
     get_market_losers,
     get_market_gainers,
-    get_economic_holiday
+    get_economic_holiday,
+    get_market_news
+)
+from utils.format_tweet import (
+    format_preMarket_tweet,
+    format_large_cap,
+    format_earnings_tweet,
+    format_news
 )
 def checkTime():
     now = datetime.now()
@@ -74,7 +80,7 @@ def after_market_losers_tweet():
         print("Failed to post tweet:", e)
 
 def earnings_tweet():
-    client = getClient()
+    client = get_client()
     earnings = get_earnings_calendar()
     tweet_text = format_earnings_tweet(earnings)
     try:
@@ -83,10 +89,20 @@ def earnings_tweet():
     except tweepy.TweepyException as e:
         print("Failed to post tweet:", e)
 
+def market_news_tweet():
+    client = get_client()
+    news = get_market_news()
+    tweet_text = format_news(news)
+    print(tweet_text)
+    # try:
+    #     response = client.create_tweet(text=tweet_text)
+    #     print("Tweet posted successfully! Tweet ID:", response.data['id'])
+    # except tweepy.TweepyException as e:
+    #     print("Failed to post tweet:", e)
 
 
 if __name__ == "__main__":
-    
+    news = market_news_tweet()
 
 
 

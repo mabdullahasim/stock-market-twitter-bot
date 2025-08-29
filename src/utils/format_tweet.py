@@ -41,5 +41,10 @@ def format_earnings_tweet(data):
 
     return tweet_text
 
-def format_news():
-    
+def format_news(news):
+    lines = []
+    lines.append(news["summary"])
+    lines.append(news["source"])
+    lines.append(news["url"])
+    tweet_text = f'{news["title"]}:\n' + "\n".join(lines)
+    return tweet_text
