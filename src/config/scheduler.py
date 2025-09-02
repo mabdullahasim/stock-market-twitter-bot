@@ -1,7 +1,7 @@
 import tweepy
-from bot.twitter_client import get_client
+from config.twitter_client import get_client
 from datetime import datetime
-from bot.data_fetching import (
+from config.data_fetching import (
     get_earnings_calendar,
     get_market_losers,
     get_market_gainers,
@@ -94,15 +94,14 @@ def market_news_tweet():
     news = get_market_news()
     tweet_text = format_news(news)
     print(tweet_text)
-    # try:
-    #     response = client.create_tweet(text=tweet_text)
-    #     print("Tweet posted successfully! Tweet ID:", response.data['id'])
-    # except tweepy.TweepyException as e:
-    #     print("Failed to post tweet:", e)
+    try:
+        response = client.create_tweet(text=tweet_text)
+        print("Tweet posted successfully! Tweet ID:", response.data['id'])
+    except tweepy.TweepyException as e:
+        print("Failed to post tweet:", e)
 
+def run_bot():
 
-if __name__ == "__main__":
-    news = market_news_tweet()
 
 
 
