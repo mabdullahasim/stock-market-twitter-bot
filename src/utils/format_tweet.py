@@ -1,6 +1,9 @@
 import pandas as pd
+from openai import OpenAI
 from utils.format_data import format_earnings
 from datetime import datetime
+import os
+from dotenv import load_dotenv
 def format_preMarket_tweet(data):
     lines = []
     for ticker, change, volume in data:
@@ -43,8 +46,38 @@ def format_earnings_tweet(data):
 
 def format_news(news):
     lines = []
-    lines.append(news["summary"])
-    lines.append(news["source"])
-    lines.append(news["url"])
+    summary = clean_market_news(news["summary"])
+    lines.append(summary +"\n")
+    lines.append("Source: "+news["source"]+"\n")
+    lines.append(news["url"]+"\n")
     tweet_text = f'{news["title"]}:\n' + "\n".join(lines)
     return tweet_text
+
+def clean_market_news(summary):
+    client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+    prompt = f"""
+        Clean this market summary
+        
+        Rules:
+        - If the text is already good just return a short clean version
+        - If it has filler like "transcripts from earnings call" or "brought to you by Benzinga APIs", remove that.
+        - I want clean small summary no useless info
+        - If the summary is to vauge give it some depth, keep it short and relevant
+        - Do not add fluff or make it long.
+
+        Example input:
+        Webull Corp BULL reported its second-quarter financial results after the market close on Thursday.
+        Below are the transcripts from the second quarter earnings call. This transcript is brought to you by Benzinga APIs.
+        For real-time access to our entire catalog, please visit ...
+
+        Expected output:
+        Webull Corp BULL reported its second-quarter financial results after the market close on Thursday.
+
+        {summary}
+        """
+
+    response = client.chat.completions.create(
+        model ="gpt-4o",
+        messages=[{"role": "user", "content": prompt}]
+    )
+    return response.choices[0].message.content.strip()
