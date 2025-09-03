@@ -50,12 +50,16 @@ Setup Instructions:
 
 4. Set up environment variables:
     create a .env file in the project root.
+   
     TWITTER_API_KEY=your_api_key
+   
     TWITTER_API_SECRET_KEY=your_api_secret
+   
     TWITTER_ACCESS_TOKEN=your_access_token
+   
     TWITTER_ACCESS_TOKEN_SECRET=your_access_token_secret
 
-5. Configure bot settings:
+6. Configure bot settings:
     You can customize posting times, stock tickers, or news sources in the configuration file.
 
 License:
