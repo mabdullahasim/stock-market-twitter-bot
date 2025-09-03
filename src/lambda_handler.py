@@ -15,7 +15,12 @@ logger.setLevel(logging.INFO)
 def lambda_handler(event, context):
     job = event.get("job")
     logger.info(f"Running job: {job}")
-
+    closed_message = get_market_status_message()
+    if closed_message:
+        logger.info("Market is closed. Sending closed-market tweet.")
+        market_closed_tweet(closed_message)
+        return {"statusCode": 200, "body": "Market closed, tweeted message."}
+        
     if job == "pre_market_gainers":
         pre_market_gainers_tweet()
     elif job == "pre_market_losers":
