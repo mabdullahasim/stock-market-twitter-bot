@@ -15,16 +15,22 @@ from utils.format_tweet import (
     format_earnings_tweet,
     format_news
 )
-
-def pre_market_gainers_tweet():
+def market_closed_tweet():
     client = get_client()
     holiday = get_economic_holiday()
     if holiday is not None:
-        tweet_text = f"Today is {holiday} so market is closed"
-    else:
-        gainers = get_market_gainers()
-        tweet_text = "Pre-Market Gainers:\n" + "\n"
-        tweet_text += format_preMarket_tweet(gainers)
+        tweet_text = f"Today is the market is closed"
+    try:
+        client.create_tweet(text=message)  # or tweepy API
+        logger.info("Market closed tweet sent successfully.")
+    except Exception as e:
+        logger.error(f"Failed to send market closed tweet: {e}")
+
+def pre_market_gainers_tweet():
+    client = get_client()
+    gainers = get_market_gainers()
+    tweet_text = "Pre-Market Gainers:\n" + "\n"
+    tweet_text += format_preMarket_tweet(gainers)
     try:
         response = client.create_tweet(text=tweet_text)
         print("Tweet posted successfully! Tweet ID:", response.data['id'])
@@ -33,13 +39,9 @@ def pre_market_gainers_tweet():
     
 def pre_market_losers_tweet():
     client = get_client()
-    holiday = get_economic_holiday()
-    if holiday is not None:
-        tweet_text = f"Today is {holiday} so market is closed"
-    else:
-        losers = get_market_losers()
-        tweet_text = "Pre-Market Losers:\n" + "\n"
-        tweet_text += format_preMarket_tweet(losers)
+    losers = get_market_losers()
+    tweet_text = "Pre-Market Losers:\n" + "\n"
+    tweet_text += format_preMarket_tweet(losers)
     try:
         response = client.create_tweet(text=tweet_text)
         print("Tweet posted successfully! Tweet ID:", response.data['id'])
@@ -48,13 +50,9 @@ def pre_market_losers_tweet():
 
 def after_market_gainers_tweet():
     client = get_client()
-    holiday = get_economic_holiday()
-    if holiday is not None:
-        tweet_text = f"Today is {holiday} so market is closed"
-    else:
-        gainers = get_market_gainers()
-        tweet_text = "After-Market Gainers:\n" + "\n"
-        tweet_text += format_preMarket_tweet(gainers)
+    gainers = get_market_gainers()
+    tweet_text = "After-Market Gainers:\n" + "\n"
+    tweet_text += format_preMarket_tweet(gainers)
     try:
         response = client.create_tweet(text=tweet_text)
         print("Tweet posted successfully! Tweet ID:", response.data['id'])
@@ -63,13 +61,9 @@ def after_market_gainers_tweet():
     
 def after_market_losers_tweet():
     client = get_client()
-    holiday = get_economic_holiday()
-    if holiday is not None:
-        tweet_text = f"Today is {holiday} so market is closed"
-    else:
-        losers = get_market_losers()
-        tweet_text = "After-Market Losers:\n" + "\n"
-        tweet_text += format_preMarket_tweet(losers)
+    losers = get_market_losers()
+    tweet_text = "After-Market Losers:\n" + "\n"
+    tweet_text += format_preMarket_tweet(losers)
     try:
         response = client.create_tweet(text=tweet_text)
         print("Tweet posted successfully! Tweet ID:", response.data['id'])
@@ -78,12 +72,8 @@ def after_market_losers_tweet():
 
 def large_cap_stock_tweet():
     client = get_client()
-    holiday = get_economic_holiday()
-    if holiday is not None:
-        tweet_text = f"Today is {holiday} so market is closed"
-    else:
-        large_cap_tweet = large_cap_stock_data()
-        tweet_text = format_large_cap
+    large_cap_tweet = large_cap_stock_data()
+    tweet_text = format_large_cap
     try:
         response = client.create_tweet(text=tweet_text)
         print("Tweet posted successfully! Tweet ID:", response.data['id'])
