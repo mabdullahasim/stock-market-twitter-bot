@@ -19,9 +19,10 @@ def market_closed_tweet():
     client = get_client()
     holiday = get_economic_holiday()
     if holiday is not None:
-        tweet_text = f"Today is the market is closed"
+        tweet_text = "Today is the market is closed"
+
     try:
-        client.create_tweet(text=message)  # or tweepy API
+        client.create_tweet(text=tweet_text)
         logger.info("Market closed tweet sent successfully.")
     except Exception as e:
         logger.error(f"Failed to send market closed tweet: {e}")

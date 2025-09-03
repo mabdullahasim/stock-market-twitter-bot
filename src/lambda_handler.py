@@ -7,7 +7,9 @@ from config.scheduler import (
     earnings_tweet,
     market_news_tweet,
     large_cap_stock_tweet,
+    market_closed_tweet
 )
+from config.data_fetching import get_economic_holiday
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
@@ -15,12 +17,12 @@ logger.setLevel(logging.INFO)
 def lambda_handler(event, context):
     job = event.get("job")
     logger.info(f"Running job: {job}")
-    closed_message = get_market_status_message()
-    if closed_message:
-        logger.info("Market is closed. Sending closed-market tweet.")
-        market_closed_tweet(closed_message)
-        return {"statusCode": 200, "body": "Market closed, tweeted message."}
-        
+    holiday = get_economic_holiday()
+    if holiday is not None:
+        logger.info(f"Market is closed today: {holiday}")
+        market_closed_tweet()
+        return {"statusCode": 200, "body": f"Market is closed today: {holiday}. Tweet sent."}
+
     if job == "pre_market_gainers":
         pre_market_gainers_tweet()
     elif job == "pre_market_losers":
