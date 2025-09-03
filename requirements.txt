@@ -1,4 +1,6 @@
-tweepy
-schedule
+yfinance
+requests
+beautifulsoup4
 python-dotenv
-
+tweepy
+openai

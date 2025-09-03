@@ -10,11 +10,11 @@ from datetime import datetime, timedelta
 
 load_dotenv()
 def get_market_gainers():
-    time = datetime.now()
+    now = datetime.now()
     #use conditional statement to make the code reusable for after hours and premarket so no need for seperate function
     #if time is 4:15pm (after hours) then get after hours gainers
     #else it is premarket
-    if now.hour() == 16 and now.minute() == 15:
+    if now.hour == 16 and now.minute == 15:
         URL = "https://www.tradingview.com/markets/stocks-usa/market-movers-after-hours-gainers/"
     else:
         URL = "https://www.tradingview.com/markets/stocks-usa/market-movers-pre-market-gainers/"
@@ -51,13 +51,13 @@ def large_cap_stock_data():
     return large_cap_data                                                              #return the large_cap_stock data
 
 def get_market_losers():
-    time = datetime.now()
-    if now.hour() == 16 and now.minute() == 15:
+    now = datetime.now()
+    if now.hour == 16 and now.minute == 15:
         URL = "https://www.tradingview.com/markets/stocks-usa/market-movers-after-hours-losers/"
     else:
         URL = "https://www.tradingview.com/markets/stocks-usa/market-movers-pre-market-losers/"
     losers = []
-    response = requests.get(PRE_MARKET_URL)
+    response = requests.get(URL)
     html = response.text
     soup = BeautifulSoup(html, "html.parser")
     tbody = soup.find("tbody")
