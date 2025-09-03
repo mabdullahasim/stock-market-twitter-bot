@@ -7,7 +7,7 @@ from config.data_fetching import (
     get_market_gainers,
     get_economic_holiday,
     get_market_news,
-    get_large_cap_data
+    large_cap_stock_data
 )
 from utils.format_tweet import (
     format_preMarket_tweet,
