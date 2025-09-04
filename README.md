@@ -36,6 +36,8 @@ Tech Stack:
 
     AWS Lambda (for serverless deployment)
 
+    AWS Event Bridge Rules for automated posting.
+
 Setup Instructions:
 1. Clone the repository:
     git clone <your-repo-url>
@@ -60,7 +62,9 @@ Setup Instructions:
     TWITTER_ACCESS_TOKEN_SECRET=your_access_token_secret
 
 6. Configure bot settings:
-    You can customize posting times, stock tickers, or news sources in the configuration file.
+    You can customize stock tickers, or news sources in the configuration file, and can customize
+
+    posting times in AWS Event bridge when you deploy the application to make it automated.
 
 License:
     This project is licensed under the MIT License.
