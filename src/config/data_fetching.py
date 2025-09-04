@@ -35,13 +35,13 @@ def get_market_gainers():
     return gainers
 
 def large_cap_stock_data():
-    tickers = ["AAPL", "NVDA", "TSLA", "MSFT", "META", "PLTR", "AMD", "AMZN"]  #large cap tickers to get data from
+    tickers = ["AAPL", "NVDA", "TSLA", "MSFT", "META", "PLTR", "AMZN"]  #large cap tickers to get data from
     gainers = []                                                               #temp list
     for ticker in tickers:                                                     #iterate through the tickers in tickers
         stock = yf.Ticker(ticker)                                              #create a stock object for the specified ticker
         data = stock.history(period="2d")                                      #get the data for the tco from the past 2 days
 
-        current_price = data['Close'].iloc[-1]                                  #gets the current price held in close for the day
+        current_price = stock.info.get('regularMarketPrice')                                #gets the current price held in close for the day
         current_volume = data['Volume'].iloc[-1]                               #gets the current volume for the day
         yesterday_close = data['Close'].iloc[-2]                                #gets the closing price of the day before
 

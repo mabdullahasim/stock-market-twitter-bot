@@ -32,7 +32,6 @@ def pre_market_gainers_tweet():
     gainers = get_market_gainers()
     tweet_text = "Pre-Market Gainers:\n" + "\n"
     tweet_text += format_preMarket_tweet(gainers)
-    print(tweet_text)
     try:
         response = client.create_tweet(text=tweet_text)
         print("Tweet posted successfully! Tweet ID:", response.data['id'])
@@ -44,7 +43,6 @@ def pre_market_losers_tweet():
     losers = get_market_losers()
     tweet_text = "Pre-Market Losers:\n" + "\n"
     tweet_text += format_preMarket_tweet(losers)
-    print(tweet_text)
     try:
         response = client.create_tweet(text=tweet_text)
         print("Tweet posted successfully! Tweet ID:", response.data['id'])
@@ -56,7 +54,6 @@ def after_market_gainers_tweet():
     gainers = get_market_gainers()
     tweet_text = "After-Market Gainers:\n" + "\n"
     tweet_text += format_preMarket_tweet(gainers)
-    print(tweet_text)
     try:
         response = client.create_tweet(text=tweet_text)
         print("Tweet posted successfully! Tweet ID:", response.data['id'])
@@ -68,7 +65,6 @@ def after_market_losers_tweet():
     losers = get_market_losers()
     tweet_text = "After-Market Losers:\n" + "\n"
     tweet_text += format_preMarket_tweet(losers)
-    print(tweet_text)
     try:
         response = client.create_tweet(text=tweet_text)
         print("Tweet posted successfully! Tweet ID:", response.data['id'])
@@ -79,7 +75,6 @@ def large_cap_stock_tweet():
     client = get_client()
     large_cap_data = large_cap_stock_data()
     tweet_text = format_large_cap(large_cap_data)
-    print(tweet_text)
     try:
         response = client.create_tweet(text=tweet_text)
         print("Tweet posted successfully! Tweet ID:", response.data['id'])
@@ -90,7 +85,6 @@ def earnings_tweet():
     client = get_client()
     earnings = get_earnings_calendar()
     tweet_text = format_earnings_tweet(earnings)
-    print(tweet_text)
     try:
         response = client.create_tweet(text=tweet_text)
         print("Tweet posted successfully! Tweet ID:", response.data['id'])
@@ -101,7 +95,6 @@ def market_news_tweet():
     client = get_client()
     news = get_market_news()
     tweet_text = format_news(news)
-    print(tweet_text)
     try:
         response = client.create_tweet(text=tweet_text)
         print("Tweet posted successfully! Tweet ID:", response.data['id'])
