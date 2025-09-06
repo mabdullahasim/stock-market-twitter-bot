@@ -4,10 +4,6 @@ Stock Market Twitter Bot:
     It provides key market information at market open, mid-day,
     and close, keeping followers informed about top gainers,
     losers, trading volume, and major news.
-    A Python bot that automatically posts financial and stock market updates on Twitter.
-    It provides key market information at market open, mid-day,
-    and close, keeping followers informed about top gainers,
-    losers, trading volume, and major news.
 
 Features:
 
@@ -23,16 +19,12 @@ Features:
 
     AI usage: Uses openAI's chat gpt to summarize a news article given rules
 
-    Earings updates: Posts earnigns updates for the week
-
-    AI usage: Uses openAI's chat gpt to summarize a news article given rules
 
 Tech Stack:
     Python 3
 
     Tweepy (or other Twitter API library for posting tweets)
 
-    Requests / BeautifulSoup (for market data scraping)
     Requests / BeautifulSoup (for market data scraping)
 
     dotenv (for environment variables and API keys)
@@ -42,14 +34,8 @@ Tech Stack:
     Pandas & NumPy (for data manipulation)
 
     YFinance (for stock market data)
-
-    AWS Lambda (for serverless deployment)
-
+    
     OpenAI API (for summarizing or formatting news, if used)
-
-    Pandas & NumPy (for data manipulation)
-
-    YFinance (for stock market data)
 
     AWS Lambda (for serverless deployment)
 
